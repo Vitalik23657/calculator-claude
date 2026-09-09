@@ -6,6 +6,15 @@ A basic four-function calculator built with plain HTML, CSS, and JavaScript — 
 
 Open `index.html` in any modern web browser. That's it — no installation or server required.
 
+### Run with Docker
+
+```bash
+docker build -t calculator .
+docker run --rm -d -p 8080:80 --name calculator calculator
+```
+
+Then open http://localhost:8080.
+
 ## Project Structure
 
 ```
