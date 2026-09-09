@@ -1,0 +1,21 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; [ \"$(basename \"$f\")\" = \"script.js\" ] && node --check \"$f\" && echo \"script.js: syntax OK\"; }",
+            "statusMessage": "Checking script.js syntax..."
+          },
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; case \"$(basename \"$f\")\" in Dockerfile|nginx.conf) docker build -t calculator-hook-test . >/tmp/calculator-docker-build.log 2>&1 && echo \"Docker build OK\" || { echo \"Docker build FAILED - see /tmp/calculator-docker-build.log\"; tail -20 /tmp/calculator-docker-build.log; } ;; esac; }",
+            "statusMessage": "Rebuilding Docker image to verify..."
+          }
+        ]
+      }
+    ]
+  }
+}
