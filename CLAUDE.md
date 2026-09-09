@@ -29,7 +29,8 @@ There is no build/lint/test tooling for the app code itself — it's still plain
   - `chooseOperation()` auto-computes a pending calculation before starting the next one, which is what makes chained input like `2 + 3 + 4` work.
   - `compute()` rounds results (`Math.round(result * 1e10) / 1e10`) to avoid floating-point display artifacts (e.g. `0.1 + 0.2`), and returns `"Error"` on divide-by-zero instead of `Infinity`/`NaN`.
   - A single click listener is delegated across all `.btn` elements (reads `dataset.value`/`dataset.action`), and a parallel `keydown` listener mirrors the same actions for keyboard input (digits, `+ - * /`, `Enter`/`=`, `Backspace`, `Escape`). When adding a new operation, update both handlers plus `operatorSymbol()` (used for the expression-line display).
-- `Dockerfile` — single-stage build on `nginx:alpine`. Copies the three static files into `/usr/share/nginx/html` and a custom `nginx.conf` into `/etc/nginx/conf.d/default.conf`. No build step exists, so no multi-stage image is needed.
+- `login.html` / `login.css` / `login.js` — standalone email+password login page. No backend/database: `login.js` only checks the email looks well-formed and the password is non-empty, then redirects to `index.html`. Black-and-white palette, separate from the calculator's dark theme.
+- `Dockerfile` — single-stage build on `nginx:alpine`. Copies the static files (calculator + login page) into `/usr/share/nginx/html` and a custom `nginx.conf` into `/etc/nginx/conf.d/default.conf`. No build step exists, so no multi-stage image is needed.
 - `nginx.conf` — minimal server block: explicit port 80, gzip for CSS/JS, short cache headers on static assets, `try_files` for request handling.
 - `.dockerignore` — keeps `.git`, docs, and the Docker meta-files themselves out of the build context.
 
